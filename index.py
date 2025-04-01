@@ -92,7 +92,7 @@ def analyze_with_mistral(legal_text):
         
         # Prepare the request payload
         payload = {
-            "model": "deepseek/deepseek-v3-base:free",
+            "model": "google/gemini-2.5-pro-exp-03-25:free",
             "messages": [
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_message}
