@@ -16,7 +16,7 @@ app = Flask(__name__)
 
 # OpenRouter API for Mistral
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
 headers = {
     "Authorization": f"Bearer {OPENROUTER_API_KEY}",
