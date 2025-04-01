@@ -60,7 +60,7 @@ def analyze_with_mistral(legal_text):
         legal_text (str): The legal text to analyze
         
     Returns:
-        dict: Dictionary containing good_clausess and bad_clausess lists
+        dict: Dictionary containing good_clauses and bad_clauses lists
     """
     try:
         # Check if OpenRouter API key is set
@@ -68,8 +68,8 @@ def analyze_with_mistral(legal_text):
             logger.error("OpenRouter API key not found in environment variables")
             return {
                 "error": "OpenRouter API key not configured",
-                "good_clausess": [],
-                "bad_clausess": []
+                "good_clauses": [],
+                "bad_clauses": []
             }
             
         # Prepare the system and user messages for Mistral
@@ -81,8 +81,8 @@ def analyze_with_mistral(legal_text):
         Bad clauses are those that are one-sided, potentially exploitative, or have hidden implications.
         
         Format your response as JSON with exactly two keys:
-        1. "good_clausess": A list of strings, where each string is a good clause
-        2. "bad_clausess": A list of strings, where each string is a bad clause
+        1. "good_clauses": A list of strings, where each string is a good clause
+        2. "bad_clauses": A list of strings, where each string is a bad clause
         
         Respond only with the JSON object, no additional text or explanation.
         
@@ -112,34 +112,34 @@ def analyze_with_mistral(legal_text):
             result = json_text if isinstance(json_text, dict) else json.loads(json_text)
             
             # Ensure the expected keys exist
-            if "good_clausess" not in result or "bad_clausess" not in result:
+            if "good_clauses" not in result or "bad_clauses" not in result:
                 logger.warning("Mistral response missing expected keys")
                 return {
-                    "good_clausess": result.get("good_clausess", []),
-                    "bad_clausess": result.get("bad_clausess", [])
+                    "good_clauses": result.get("good_clauses", []),
+                    "bad_clauses": result.get("bad_clauses", [])
                 }
                 
             return {
-                "good_clausess": result.get("good_clausess", []),
-                "bad_clausess": result.get("bad_clausess", [])
+                "good_clauses": result.get("good_clauses", []),
+                "bad_clauses": result.get("bad_clauses", [])
             }
         else:
             logger.error(f"API request failed with status {response.status_code}: {response.text}")
             return {
                 "error": f"API request failed: {response.status_code}",
-                "good_clausess": [],
-                "bad_clausess": []
+                "good_clauses": [],
+                "bad_clauses": []
             }
             
     except requests.exceptions.RequestException as e:
         logger.error(f"Request error: {str(e)}")
-        return {"error": f"Request error: {str(e)}", "good_clausess": [], "bad_clausess": []}
+        return {"error": f"Request error: {str(e)}", "good_clauses": [], "bad_clauses": []}
     except json.JSONDecodeError as e:
         logger.error(f"Error parsing Mistral response: {str(e)}")
-        return {"error": "Failed to parse AI response", "good_clausess": [], "bad_clausess": []}
+        return {"error": "Failed to parse AI response", "good_clauses": [], "bad_clauses": []}
     except Exception as e:
         logger.error(f"Error in analyze_with_mistral: {str(e)}")
-        return {"error": f"Analysis error: {str(e)}", "good_clausess": [], "bad_clausess": []}
+        return {"error": f"Analysis error: {str(e)}", "good_clauses": [], "bad_clauses": []}
 
 def extract_json(text):
     """Extract JSON content from the LLM response"""
@@ -161,8 +161,8 @@ def extract_json(text):
     except Exception as e:
         logger.error(f"JSON parsing error: {str(e)}")
         return {
-            "good_clausess": [],
-            "bad_clausess": [],
+            "good_clauses": [],
+            "bad_clauses": [],
             "error": "Could not extract valid JSON from the model response."
         }
 
